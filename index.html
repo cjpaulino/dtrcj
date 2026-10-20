@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Community Service DTR System</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <h1>Community Service &amp; Sanctioned Duty</h1>
+    <p>Daily Time Record System</p>
+  </header>
+
+  <main class="container">
+    <section id="authPage" class="card">
+      <div class="tabs">
+        <button id="loginTab" class="tab-button active" type="button">Login</button>
+        <button id="registerTab" class="tab-button" type="button">Register</button>
+      </div>
+
+      <form id="loginForm" autocomplete="on">
+        <h2>Login</h2>
+
+        <label for="loginUsername">Username</label>
+        <input id="loginUsername" name="loginUsername" type="text" autocomplete="username" required>
+
+        <label for="loginPassword">Password</label>
+        <input id="loginPassword" name="loginPassword" type="password" autocomplete="current-password" required>
+
+        <p id="loginMessage" class="message" aria-live="polite"></p>
+        <button type="submit">Log in</button>
+      </form>
+
+      <form id="registerForm" class="hidden" autocomplete="on">
+        <h2>Create an Account</h2>
+
+        <label for="registerName">Full name</label>
+        <input id="registerName" name="registerName" type="text" autocomplete="name" required>
+
+        <label for="registerUsername">Username</label>
+        <input id="registerUsername" name="registerUsername" type="text" autocomplete="username" required>
+
+        <label for="registerPassword">Password</label>
+        <input id="registerPassword" name="registerPassword" type="password" minlength="6" autocomplete="new-password" required>
+
+        <label for="registerRole">Register as</label>
+        <select id="registerRole" name="registerRole" required>
+          <option value="">Choose a role</option>
+          <option value="student">Student</option>
+          <option value="admin">Admin</option>
+        </select>
+
+        <p class="note">
+          Demo only. Sa totoong system, dapat authorized staff lang ang gumawa ng Admin account.
+        </p>
+
+        <p id="registerMessage" class="message" aria-live="polite"></p>
+        <button type="submit">Create account</button>
+      </form>
+    </section>
+
+    <section id="dashboardPage" class="dashboard hidden">
+      <div class="dashboard-heading">
+        <div>
+          <p class="eyebrow">DAILY TIME RECORD</p>
+          <h2 id="dashboardTitle">Dashboard</h2>
+          <p id="welcomeText" class="welcome-text"></p>
+        </div>
+        <button id="logoutButton" class="logout-button" type="button">Log out</button>
+      </div>
+
+      <p id="dashboardMessage" class="message" aria-live="polite"></p>
+
+      <section id="studentDashboard" class="hidden" aria-labelledby="studentGreeting">
+        <div class="section-heading">
+          <div>
+            <h3 id="studentGreeting">Your duty today</h3>
+            <p id="studentTodayDate" class="muted"></p>
+          </div>
+        </div>
+
+        <div class="student-status card">
+          <div>
+            <p class="eyebrow">TODAY'S STATUS</p>
+            <p id="studentTodayStatus" class="status-text">Not clocked in</p>
+            <p id="studentTodayTimes" class="muted">Time in: — &nbsp; Time out: —</p>
+          </div>
+          <div class="punch-actions">
+            <button id="clockInButton" type="button">Clock in</button>
+            <button id="clockOutButton" class="secondary-button" type="button" disabled>Clock out</button>
+          </div>
+        </div>
+
+        <section class="table-section" aria-labelledby="studentRecordsHeading">
+          <div class="section-heading">
+            <div>
+              <h3 id="studentRecordsHeading">Your recent records</h3>
+              <p class="muted">Your latest 30 duty days</p>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Time in</th>
+                  <th>Time out</th>
+                  <th>Total hours</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="studentRecordsBody"></tbody>
+            </table>
+          </div>
+          <p id="studentEmptyState" class="empty-state hidden">No duty records yet. Clock in to start today's record.</p>
+        </section>
+      </section>
+
+      <section id="adminDashboard" class="hidden" aria-labelledby="adminOverviewHeading">
+        <div class="section-heading">
+          <div>
+            <h3 id="adminOverviewHeading">Attendance overview</h3>
+            <p id="adminTodayDate" class="muted"></p>
+          </div>
+        </div>
+
+        <div class="summary-grid">
+          <article class="summary-card">
+            <p>Registered students</p>
+            <strong id="studentCount">0</strong>
+          </article>
+          <article class="summary-card">
+            <p>Clocked in today</p>
+            <strong id="clockedInCount">0</strong>
+          </article>
+          <article class="summary-card">
+            <p>Completed today</p>
+            <strong id="completedCount">0</strong>
+          </article>
+          <article class="summary-card">
+            <p>Hours worked today</p>
+            <strong id="hoursToday">0h 0m</strong>
+          </article>
+        </div>
+
+        <section class="table-section" aria-labelledby="adminRecordsHeading">
+          <div class="section-heading admin-records-heading">
+            <div>
+              <h3 id="adminRecordsHeading">DTR records</h3>
+              <p class="muted">Filter by student name or date.</p>
+            </div>
+            <div class="filters">
+              <div class="filter-field">
+                <label for="recordSearch">Student</label>
+                <input id="recordSearch" type="search" placeholder="Search name or username">
+              </div>
+              <div class="filter-field">
+                <label for="recordDateFilter">Date</label>
+                <input id="recordDateFilter" type="date">
+              </div>
+              <button id="clearFiltersButton" class="secondary-button" type="button">Clear filters</button>
+            </div>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Student</th>
+                  <th>Time in</th>
+                  <th>Time out</th>
+                  <th>Total hours</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="adminRecordsBody"></tbody>
+            </table>
+          </div>
+          <p id="adminEmptyState" class="empty-state hidden">No records match these filters.</p>
+        </section>
+        <p class="note">Demo only: data is stored in this browser and is not shared with other devices.</p>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    Community Service and Sanctioned Duty DTR System
+  </footer>
+</body>
+</html>
